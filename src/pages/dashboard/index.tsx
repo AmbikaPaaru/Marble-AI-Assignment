@@ -20,7 +20,7 @@ export const Dashboard: React.FC = () => {
       field: "end",
       operator: "eq",
       value: toDate
-        ? dayjs(toDate).endOf("day")
+        ? dayjs(toDate).endOf("day").add(1, "days")
         : dayjs().startOf("day").add(1, "days"),
     },
   ];
@@ -39,24 +39,32 @@ export const Dashboard: React.FC = () => {
     return useMemo(() => {
       if (d?.data?.data?.length > 0 && dailyOrders?.data?.data?.length > 0) {
         const formattedData1 = d?.data?.data?.map((item: IChartDatum) => {
-          const formattedDate = dayjs(item?.date).format("MMM D, YYYY");
-          const currentDate = dayjs(formattedDate)
-            .add(1, "day")
-            .format("MMM D, YYYY");
+          const currentDate = new Date(item?.date);
+          currentDate.setDate(currentDate.getDate());
 
+          const nextDateStr = currentDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          });
           return {
-            date: fromDate && toDate ? currentDate : formattedDate,
+            date: nextDateStr,
             value: item?.value,
           };
         });
+
         const formattedData2 = dailyOrders?.data?.data?.map(
           (item: IChartDatum) => {
-            const formattedDate = dayjs(item?.date).format("MMM D, YYYY");
-            const currentDate = dayjs(formattedDate)
-              .add(1, "day")
-              .format("MMM D, YYYY");
+            const currentDate = new Date(item?.date);
+            currentDate.setDate(currentDate.getDate());
+
+            const nextDateStr = currentDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            });
             return {
-              date: fromDate && toDate ? currentDate : formattedDate,
+              date: nextDateStr,
               value1: item?.value,
             };
           }
