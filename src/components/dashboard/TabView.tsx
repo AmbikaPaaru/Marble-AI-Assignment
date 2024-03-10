@@ -56,7 +56,7 @@ export const TabView = ({
                 }}
               >
                 <div className="flex justify-between text-[12px] font-[500]">
-                  <Popover content={<HoverComponent />} placement="bottom">
+                  <Popover content={<HoverComponent title={tab?.label} />} placement="bottom">
                     <span className="border-b-2 border-dashed border-gray-300">
                       {tab?.label}
                     </span>
@@ -114,6 +114,12 @@ export const TabView = ({
             <div className="h-[32px] flex justify-end align-center items-center">
               <DateRangeDisplay
                 content={
+                  <span>
+                    {fromDate?fromDate:options[0]?.date} -{" "}
+                    {toDate?toDate:options[options?.length-1]?.date}
+                  </span>
+                }
+                content2={
                   <span>
                     {fromDate?fromDate:options[0]?.date} -{" "}
                     {toDate?toDate:options[options?.length-1]?.date}

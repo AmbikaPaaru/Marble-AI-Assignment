@@ -64,20 +64,20 @@ export const ResponsiveAreaChart = ({
           content={({ payload }) => {
             if (payload && payload.length > 0) {
               const { date } = payload[0].payload;
-
+              console.log(payload[0]?.payload);
               return (
                 <div className="custom-tooltip p-2 text-[12px] bg-white rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[180px]">
                   <DateRangeDisplay
                     content1={
                       <span>
                         {payload[0]?.payload?.date}&nbsp; &nbsp;{" "}
-                        {payload[0]?.payload?.value1}
+                        {payload[0]?.payload?.value}
                       </span>
                     }
                     content={
                       <span>
                         {payload[0]?.payload?.date}&nbsp; &nbsp;{" "}
-                        {payload[0]?.value}
+                        {payload[0]?.payload?.value1}
                       </span>
                     }
                     bg={false}

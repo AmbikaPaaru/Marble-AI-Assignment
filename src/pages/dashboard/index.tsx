@@ -1,4 +1,4 @@
-import React, {useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { CrudFilter, useList } from "@refinedev/core";
 import { IChartDatum, TTab } from "../../interfaces";
@@ -7,6 +7,7 @@ import { TabView } from "../../components/dashboard/TabView";
 export const Dashboard: React.FC = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+
   const filters: CrudFilter[] = [
     {
       field: "start",
@@ -37,24 +38,28 @@ export const Dashboard: React.FC = () => {
   const useMemoizedChartData = (d: any, dailyOrders: any) => {
     return useMemo(() => {
       if (d?.data?.data?.length > 0 && dailyOrders?.data?.data?.length > 0) {
-        const formattedData1 = d?.data?.data?.map((item: IChartDatum) => ({
-          date: new Intl.DateTimeFormat("en-US", {
-            month: "short",
-            year: "numeric",
-            day: "numeric",
-          }).format(new Date(item.date)),
-          value: item?.value,
-        }));
+        const formattedData1 = d?.data?.data?.map((item: IChartDatum) => {
+          const formattedDate = dayjs(item?.date).format("MMM D, YYYY");
+          const currentDate = dayjs(formattedDate)
+            .add(1, "day")
+            .format("MMM D, YYYY");
+
+          return {
+            date: fromDate && toDate ? currentDate : formattedDate,
+            value: item?.value,
+          };
+        });
         const formattedData2 = dailyOrders?.data?.data?.map(
-          (item: IChartDatum) => ({
-            date:
-              new Intl.DateTimeFormat("en-US", {
-                month: "short",
-                year: "numeric",
-                day: "numeric",
-              }).format(new Date(item.date)) + 1,
-            value1: item?.value,
-          })
+          (item: IChartDatum) => {
+            const formattedDate = dayjs(item?.date).format("MMM D, YYYY");
+            const currentDate = dayjs(formattedDate)
+              .add(1, "day")
+              .format("MMM D, YYYY");
+            return {
+              date: fromDate && toDate ? currentDate : formattedDate,
+              value1: item?.value,
+            };
+          }
         );
 
         const mergedData = formattedData1?.map((item: any, index: number) => ({
@@ -71,6 +76,7 @@ export const Dashboard: React.FC = () => {
     newCustomers && dailyOrders && newCustomers,
     dailyOrders
   );
+
   const tabs: TTab[] = [
     {
       id: 1,
